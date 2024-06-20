@@ -1,8 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const route = require('./routes/tasks');
 
-require('./database/database')
+const connectDB = require('./database/database');
+
+connectDB();
+
 app.get('/hello', (req, res) => {
     res.send('Task Manager App')
 });
@@ -13,6 +17,7 @@ app.use('/', route);
 
 const PORT = 3000;
 
-app.listen(PORT, () => {
-    console.log('app is listening on PORT ' + PORT ) 
+
+app.listen(process.env.PORT, () => {
+    console.log('app is listening on PORT ' + process.env.PORT)
 });
