@@ -1,11 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
-const route = require('./routes/tasks');
-
+const { route } = require('./routes/tasks');
 const connectDB = require('./database/database');
 
 connectDB();
+const app = express();
 
 app.get('/hello', (req, res) => {
     res.send('Task Manager App')
