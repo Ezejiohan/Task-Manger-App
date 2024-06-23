@@ -5,7 +5,6 @@ const Task = require('../models/Task');
 // }
 
 const createTask = async (req, res) => {
-    console.log(req.body)
     const task = await Task.create(req.body)
     res.status(201).json({ task })
 }

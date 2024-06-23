@@ -15,4 +15,4 @@ route.post('/api/tasks', createTask);
 // route.patch('/api/tasks/:id', (updateTask));
 // route.delete('/api/tasks/:id', (deleteTask));
 
-module.exports = route;
+module.exports = { route };

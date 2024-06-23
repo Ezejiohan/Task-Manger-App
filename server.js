@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { route } = require('./routes/tasks');
+const {route} = require('./routes/tasks');
 const connectDB = require('./database/database');
 
 connectDB();
@@ -11,6 +11,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use('/', route);
 
 
