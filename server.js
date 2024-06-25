@@ -6,9 +6,6 @@ const connectDB = require('./database/database');
 connectDB();
 const app = express();
 
-app.get('/hello', (req, res) => {
-    res.send('Task Manager App')
-});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
