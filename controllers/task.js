@@ -9,12 +9,14 @@ const getAllTask = asyncWrapper (async (req, res) => {
 
 })
 
-const createTask = asyncWrapper (async (req, res, next) => {
-    const user = req.user;
-    if (!user) {
-        return next(createCustomError(`User not found`))
-    }     
-    const task = await Task.create(req.body)
+const createTask = asyncWrapper (async (req, res) => {
+    const { name, completed } = req.body;
+    const userId = req.userId;
+    const task = await Task.create({
+        name,
+        completed,
+        user: userId
+    })
     res.status(201).json({ task });
     
 })

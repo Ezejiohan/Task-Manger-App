@@ -4,7 +4,7 @@ const asyncWrapper = require('./async');
 const { createCustomError } = require('../errors/custom_error');
 
 
-const authenticate = asyncWrapper (async (req, res, next) => {
+const authMiddleware = asyncWrapper (async (req, res, next) => {
     const hasAuthorization = req.headers.authorization;
     if (!hasAuthorization) {
         return res.status(400).json({
@@ -12,12 +12,13 @@ const authenticate = asyncWrapper (async (req, res, next) => {
         })
     }
     const token = hasAuthorization.split(' ') [1];
-    const decodedToken = jwt.verify(token, secretKey);
-    const user = await User.findById(decodedToken.id);
+    const decoded = jwt.verify(token, secretKey);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return next(createCustomError(`Authorization Failed: User not found`, 404))
     }
-    req.user = decodedToken;
+    req.user = user;
+    req.userId = user._id;
     next();
     if (error instanceof jwt.JsonWebTokenError) {
         return res.json({
@@ -26,4 +27,4 @@ const authenticate = asyncWrapper (async (req, res, next) => {
     }
 })
 
-module.exports = { authenticate }
+module.exports = { authMiddleware }
