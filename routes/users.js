@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser } = require('../controllers/user');
+const { createUser, loginUser } = require('../controllers/user');
 
 const userRoute = express.Router();
 // userRoute.get('/', (req, res) => {
@@ -7,6 +7,6 @@ const userRoute = express.Router();
 // })
 
 userRoute.post('/users', (createUser));
-
+userRoute.post('/users', (loginUser));
 
 module.exports = { userRoute }
