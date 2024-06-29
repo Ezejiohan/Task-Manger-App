@@ -4,7 +4,6 @@ const { getAllTask,
     getTask, 
     updateTask, 
     deleteTask, 
-    editTask
 } = require('../controllers/task');
 
 const {authMiddleware} = require('../middleware/authMiddleware')
@@ -16,6 +15,5 @@ route.post('/tasks', authMiddleware, (createTask));
 route.get('/tasks/:id', (getTask));
 route.patch('/tasks/:id', (updateTask));
 route.delete('/tasks/:id', (deleteTask));
-route.put('/tasks/:id', (editTask));
 
 module.exports = { route };
