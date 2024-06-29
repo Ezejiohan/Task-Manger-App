@@ -7,7 +7,7 @@ const { getAllTask,
     editTask
 } = require('../controllers/task');
 
-const authMiddleware = require('../middleware/authMiddleware')
+const {authMiddleware} = require('../middleware/authMiddleware')
 
 const route = express.Router();
 
