@@ -12,7 +12,7 @@ const authMiddleware = asyncWrapper (async (req, res, next) => {
         })
     }
     const token = hasAuthorization.split(' ') [1];
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jwt.verify(token, process.env.TOKEN);
     const user = await User.findById(decoded.id);
     if (!user) {
         return next(createCustomError(`Authorization Failed: User not found`, 404))

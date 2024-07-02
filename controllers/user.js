@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const asyncWrapper = require('../middleware/async');
 const { createCustomError} = require('../errors/custom_error');
 
-const createUser = asyncWrapper( async (req, res) => {
+const createUsers = asyncWrapper( async (req, res) => {
     const {fullname, email, password } = req.body;
     const saltPassword = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(req.body.password, saltPassword)
@@ -14,10 +14,10 @@ const createUser = asyncWrapper( async (req, res) => {
        email,
        password: hashPassword, 
     })
-    res.status(201).json({ user })
+    res.status(201).json({ user });
 });
 
-const loginUser = asyncWrapper( async (req, res) => {
+const loginUsers = asyncWrapper( async (req, res) => {
     const loginRequest = { email:req.body.email,
         password: req.body.password }
     const user = await User.findOne({ email: req.body.email});
@@ -31,13 +31,66 @@ const loginUser = asyncWrapper( async (req, res) => {
             const generatedToken = jwt.sign({
                 id: user._id,
                 email: user.email,
-            }, secretKey, {expiresIn: '1h'})
+            }, process.env.TOKEN, {expiresIn: '1h'})
+            const result = {
+                id: user._id,
+                email: user.email,
+                token: generatedToken
+            }
+            return res.status(200).json({result});
         }
     }
     
+});
+
+const verifyUsers = asyncWrapper( async(req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        return next(createCustomError("User not found", 404))
+    }
+    if (user.verified === true) {
+        return res.status(400).json({msg: "User already verified"})
+    }
+    user.verified = true;
+    await user.save();
+    res.status(200).json({user});
+});
+
+const updateUsers = asyncWrapper(async(req, res) => {
+    const { id:userID } = req.params;
+    const user = await User.findByIdAndUpdate({ _id:userID }, req.body, {
+        new: true,
+        runValidators: true,
+    });
+    if (!user) {
+        return next(createCustomError("User not found", 404)) 
+    }
+    res.status(200).json({user});
+});
+
+const getUser = asyncWrapper(async (req, res) => {
+    const {id:userID} = req.params;
+    const user = await User.findOne({ _id:userID});
+    if (!user) {
+        return next(createCustomError("User not found", 404));   
+    }
+    res.status(200).json({user});
+});
+
+const getAllUsers = asyncWrapper(async(req, res) => {
+    const users = await User.find({});
+    res.status(200).json({users});
+});
+
+const changePassword = asyncWrapper(async(req, res) => {
+    const { oldPassword, newPassword } = req.body;
 })
 
 module.exports = {
-    createUser,
-    loginUser
+    createUsers,
+    loginUsers,
+    verifyUsers,
+    updateUsers,
+    getUser,
+    getAllUsers
 }
