@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'password must be 7 characters long and include at least one uppercase and one special character']
+    },
+    verified: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

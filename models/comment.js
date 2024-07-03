@@ -11,11 +11,11 @@ const commentSchema = new mongoose.Schema({
         ref: 'Task',
         required: true
     },
-    comment: {
+    comments: {
         type: String,
         required: true
     }
 });
 
-const Comment = mongoose.model('Comments', commentSchema);
+const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;
